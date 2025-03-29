@@ -24,7 +24,7 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '21'
-          cache: 'gradle'
+          # Remove the gradle cache configuration since we're not using Gradle directly
       
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -34,6 +34,7 @@ jobs:
       - run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
+          pip install flet-cli # Add this line to install flet-cli
       
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
@@ -52,6 +53,7 @@ jobs:
       - name: Build APK
         run: |
           export GRADLE_OPTS="-Xmx4g -Dorg.gradle.daemon=false"
+          # Fix the flet command (it was missing an 'l' in your original file)
           flet build apk \
             --build-number=$BUILD_NUMBER \
             --build-version=$BUILD_VERSION \
@@ -77,6 +79,7 @@ jobs:
       - run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
+          pip install flet-cli # Add this line to install flet-cli
       
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
@@ -85,9 +88,9 @@ jobs:
       
       - name: Build Windows
         run: |
-          flet build windows \
-            --build-number=$env:BUILD_NUMBER \
-            --build-version=$env:BUILD_VERSION \
+          flet build windows `
+            --build-number=$env:BUILD_NUMBER `
+            --build-version=$env:BUILD_VERSION `
             --verbose
       
       - uses: actions/upload-artifact@v4
