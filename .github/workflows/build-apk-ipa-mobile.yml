@@ -10,7 +10,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
 
     strategy:
       matrix:
@@ -34,9 +34,54 @@ jobs:
     - name: Build APK
       if: matrix.os == 'ubuntu-latest'
       run: |
-        sudo apt update
-        sudo apt install -y python3-pip openjdk-8-jdk unzip
-        pip install Cython==0.29.21
+        sudo apt-get update
+        sudo apt-get install -y \
+            python3-pip \
+            build-essential \
+            git \
+            python3 \
+            python3-dev \
+            ffmpeg \
+            libsdl2-dev \
+            libsdl2-image-dev \
+            libsdl2-mixer-dev \
+            libsdl2-ttf-dev \
+            libportmidi-dev \
+            libswscale-dev \
+            libavformat-dev \
+            libavcodec-dev \
+            zlib1g-dev \
+            libgstreamer1.0 \
+            gstreamer1.0-plugins-base \
+            gstreamer1.0-plugins-good \
+            build-essential \
+            libsqlite3-dev \
+            sqlite3 \
+            bzip2 \
+            libbz2-dev \
+            zlib1g-dev \
+            libssl-dev \
+            openssl \
+            libgdbm-dev \
+            libgdbm-compat-dev \
+            liblzma-dev \
+            libreadline-dev \
+            libncursesw5-dev \
+            libffi-dev \
+            uuid-dev \
+            openjdk-8-jdk \
+            unzip \
+            autoconf \
+            automake \
+            libtool \
+            libpq-dev \
+            wget
+        pip install --upgrade Cython==0.29.21
+        # Create a basic buildozer.spec if it doesn't exist
+        if [ ! -f buildozer.spec ]; then
+          buildozer init
+        fi
+        # Build the APK
         buildozer -v android debug
 
     - name: Build IPA
@@ -50,3 +95,17 @@ jobs:
         briefcase create iOS
         briefcase build iOS
         briefcase package iOS
+
+    - name: Upload APK artifact
+      if: matrix.os == 'ubuntu-latest'
+      uses: actions/upload-artifact@v2
+      with:
+        name: app-debug
+        path: bin/*.apk
+
+    - name: Upload IPA artifact
+      if: matrix.os == 'macos-latest'
+      uses: actions/upload-artifact@v2
+      with:
+        name: app-release
+        path: iOS/build/*.ipa
