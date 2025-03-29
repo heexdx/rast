@@ -141,15 +141,4 @@ class QuranApp:
 def main(page: ft.Page):
     QuranApp(page)
 
-ft.app(target=main)
-
-def main(page: ft.Page):
-    QuranApp(page)
-
 ft.app(target=main, view=ft.WEB_BROWSER)
-
-# استدعاء الدالة clos عند الضغط على Enter أو الزر Submit
-entry.bind("<Return>", clos)
-
-# تشغيل نافذة tkinter
-root.mainloop()
