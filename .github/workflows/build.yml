@@ -30,10 +30,12 @@ jobs:
         with:
           python-version: ${{ env.PYTHON_VERSION }}
       
-      - run: |
+      - name: Install dependencies
+        run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
           pip install flet-cli
+          flet --version
       
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
@@ -51,8 +53,8 @@ jobs:
       
       - name: Build APK
         run: |
-          # Correct Flet build command for Android
-          flet build apk --release
+          # Standard Flet build command for Android
+          flet build android
 
       - uses: actions/upload-artifact@v4
         with:
@@ -70,10 +72,12 @@ jobs:
         with:
           python-version: ${{ env.PYTHON_VERSION }}
       
-      - run: |
+      - name: Install dependencies
+        run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
           pip install flet-cli
+          flet --version
       
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
@@ -82,8 +86,8 @@ jobs:
       
       - name: Build Windows
         run: |
-          # Correct Flet build command for Windows
-          flet build windows --release
+          # Standard Flet build command for Windows
+          flet build windows
       
       - uses: actions/upload-artifact@v4
         with:
