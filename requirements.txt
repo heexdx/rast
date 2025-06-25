@@ -1,6 +1,6 @@
 os
 opencv-python
-ov2
+cv2
 opencv
 yt_dlp
 PIL
