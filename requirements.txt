@@ -1,5 +1,5 @@
 os
-cv2
+opencv
 yt_dlp
 PIL
 reportlab
